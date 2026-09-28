@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Architecture Diagram Viewer - Automated Test Suite</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }
+        h1 { color: #38bdf8; }
+        .test-case { background: #1e293b; padding: 1rem; border-radius: 8px; margin-bottom: 0.75rem; border-left: 4px solid #64748b; }
+        .pass { border-left-color: #34d399; }
+        .fail { border-left-color: #f43f5e; }
+        .status-badge { padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold; font-size: 0.8rem; }
+        .badge-pass { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+        .badge-fail { background: rgba(244, 63, 94, 0.2); color: #f43f5e; }
+    </style>
+</head>
+<body>
+
+    <h1>🧪 System Architecture Diagram Viewer - Test Suite</h1>
+    <p>Automated verification checks for application components, DOM rendering, modal events, search, and K8s simulations.</p>
+    <hr style="border-color: #334155; margin: 1.5rem 0;">
+
+    <div id="test-results">Running tests...</div>
+
+    <!-- Hidden fixture for testing -->
+    <div id="test-fixture" style="display: none;"></div>
+
+    <script src="../js/components.js"></script>
+    <script src="../js/architecture.js"></script>
+
+    <script>
+        const resultsContainer = document.getElementById('test-results');
+        const tests = [];
+
+        function assert(condition, testName, details = '') {
+            tests.push({
+                name: testName,
+                passed: Boolean(condition),
+                details: details
+            });
+        }
+
+        // Test 1: Registry Integrity
+        try {
+            assert(typeof ARCHITECTURE_COMPONENTS === 'object', 'Component Data Registry Exists', 'ARCHITECTURE_COMPONENTS object loaded successfully');
+            assert(Object.keys(ARCHITECTURE_COMPONENTS).length >= 15, 'Registry contains all required components', `Found ${Object.keys(ARCHITECTURE_COMPONENTS).length} components`);
+            assert(ARCHITECTURE_COMPONENTS['github'].name === 'GitHub', 'GitHub component data correct');
+            assert(ARCHITECTURE_COMPONENTS['kubernetes'].category === 'Kubernetes', 'Kubernetes component category correct');
+        } catch (e) {
+            assert(false, 'Registry Integrity Test', e.message);
+        }
+
+        // Test 2: Search Functionality
+        try {
+            // Mock SVG node
+            const mockNode = document.createElement('div');
+            mockNode.id = 'jenkins';
+            mockNode.className = 'svg-node';
+            document.body.appendChild(mockNode);
+
+            searchComponents('jenkins');
+            assert(mockNode.classList.contains('search-match'), 'Search highlights matching SVG node for query "jenkins"');
+
+            searchComponents('');
+            assert(!mockNode.classList.contains('search-match'), 'Search clear resets match highlight');
+
+            document.body.removeChild(mockNode);
+        } catch (e) {
+            assert(false, 'Search Functionality Test', e.message);
+        }
+
+        // Test 3: Zoom logic bounds
+        try {
+            resetZoom();
+            assert(currentZoom === 1, 'resetZoom() sets currentZoom to 1');
+
+            zoomIn();
+            assert(currentZoom > 1, 'zoomIn() increases zoom level');
+
+            zoomOut();
+            zoomOut();
+            assert(currentZoom < 1, 'zoomOut() decreases zoom level');
+
+            resetZoom();
+        } catch (e) {
+            assert(false, 'Zoom Logic Test', e.message);
+        }
+
+        // Test 4: Scaling simulation bounds
+        try {
+            currentReplicas = 3;
+            scaleApplication(1);
+            assert(currentReplicas === 4, 'Scale Up increases replica count to 4');
+
+            scaleApplication(-1);
+            assert(currentReplicas === 3, 'Scale Down decreases replica count back to 3');
+        } catch (e) {
+            assert(false, 'Scaling Simulation Test', e.message);
+        }
+
+        // Render Results
+        resultsContainer.innerHTML = '';
+        let passedCount = 0;
+
+        tests.forEach((t, i) => {
+            if (t.passed) passedCount++;
+            const div = document.createElement('div');
+            div.className = `test-case ${t.passed ? 'pass' : 'fail'}`;
+            div.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>#${i + 1} ${t.name}</strong>
+                    <span class="status-badge ${t.passed ? 'badge-pass' : 'badge-fail'}">${t.passed ? 'PASSED' : 'FAILED'}</span>
+                </div>
+                <div style="font-size: 0.85rem; color: #94a3b8; margin-top: 0.35rem;">${t.details}</div>
+            `;
+            resultsContainer.appendChild(div);
+        });
+
+        const summary = document.createElement('h3');
+        summary.style.marginTop = '1.5rem';
+        summary.style.color = passedCount === tests.length ? '#34d399' : '#f43f5e';
+        summary.textContent = `Test Summary: ${passedCount} / ${tests.length} Passed.`;
+        resultsContainer.prepend(summary);
+    </script>
+</body>
+</html>

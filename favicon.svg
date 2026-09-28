@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="16" fill="#0f172a"/>
+  <!-- Kubernetes/DevOps Cloud Icon -->
+  <circle cx="32" cy="32" r="14" fill="none" stroke="#38bdf8" stroke-width="4"/>
+  <circle cx="32" cy="32" r="6" fill="#38bdf8"/>
+  <path d="M 32 10 L 32 18 M 32 46 L 32 54 M 10 32 L 18 32 M 46 32 L 54 32 M 16 16 L 22 22 M 42 42 L 48 48 M 16 48 L 22 42 M 42 22 L 48 16" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+</svg>

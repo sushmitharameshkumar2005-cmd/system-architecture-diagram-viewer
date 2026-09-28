@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" id="main-architecture-svg">
+  <defs>
+    <!-- Arrow Marker -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#c084fc"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+    </marker>
+
+    <!-- Gradients -->
+    <linearGradient id="grad-vcs" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="grad-cicd" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="grad-docker" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0c4a6e"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="grad-iac" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4c1d95"/>
+      <stop offset="100%" stop-color="#6b21a8"/>
+    </linearGradient>
+    <linearGradient id="grad-k8s" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#065f46"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="grad-app" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#831843"/>
+      <stop offset="100%" stop-color="#be185d"/>
+    </linearGradient>
+  </defs>
+
+  <style>
+    .svg-node { cursor: pointer; transition: all 0.25s ease-in-out; }
+    .svg-node:hover rect { filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6)); stroke: #38bdf8; stroke-width: 2px; }
+    .svg-node:hover circle { filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.6)); stroke: #38bdf8; stroke-width: 2px; }
+    .svg-node.active rect, .svg-node.active circle { stroke: #38bdf8; stroke-width: 3px; filter: drop-shadow(0 0 15px #38bdf8); }
+    .svg-node.search-match rect, .svg-node.search-match circle { stroke: #f59e0b; stroke-width: 3px; filter: drop-shadow(0 0 15px #f59e0b); }
+    .group-label { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 700; fill: #94a3b8; letter-spacing: 1px; text-transform: uppercase; }
+    .node-title { font-family: system-ui, -apple-system, sans-serif; font-size: 13px; font-weight: 600; fill: #f8fafc; }
+    .node-sub { font-family: system-ui, -apple-system, sans-serif; font-size: 10px; fill: #94a3b8; }
+    .connection-line { stroke: #475569; stroke-width: 2; fill: none; stroke-dasharray: 4 2; animation: dash 30s linear infinite; }
+    .connection-line-solid { stroke: #64748b; stroke-width: 2; fill: none; }
+    .cluster-box { fill: #0f172a; stroke: #334155; stroke-width: 1.5; stroke-dasharray: 6 4; rx: 12px; }
+  </style>
+
+  <!-- ================= SECTION A: DEVOPS PIPELINE LAYER (TOP REGION) ================= -->
+  <g id="pipeline-group">
+    <rect x="20" y="20" width="1160" height="210" class="cluster-box" />
+    <text x="40" y="45" class="group-label">🚀 DevOps Automation Delivery Pipeline (Source to Cloud)</text>
+
+    <!-- 1. Developer -->
+    <g id="developer" class="svg-node" transform="translate(50, 75)">
+      <rect width="110" height="70" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+      <text x="55" y="32" text-anchor="middle" font-size="20">👨‍💻</text>
+      <text x="55" y="52" text-anchor="middle" class="node-title">Developer</text>
+    </g>
+
+    <!-- Arrow Developer -> GitHub -->
+    <path d="M 160 110 L 195 110" class="connection-line-solid" marker-end="url(#arrow-blue)"/>
+
+    <!-- 2. GitHub -->
+    <g id="github" class="svg-node" transform="translate(200, 75)">
+      <rect width="120" height="70" rx="8" fill="url(#grad-vcs)" stroke="#6366f1" stroke-width="1.5"/>
+      <text x="60" y="32" text-anchor="middle" font-size="20">🐙</text>
+      <text x="60" y="50" text-anchor="middle" class="node-title">GitHub</text>
+      <text x="60" y="62" text-anchor="middle" class="node-sub">Source Control</text>
+    </g>
+
+    <!-- Arrow GitHub -> Jenkins -->
+    <path d="M 320 110 L 355 110" class="connection-line-solid" marker-end="url(#arrow-blue)"/>
+
+    <!-- 3. Jenkins -->
+    <g id="jenkins" class="svg-node" transform="translate(360, 75)">
+      <rect width="120" height="70" rx="8" fill="url(#grad-cicd)" stroke="#818cf8" stroke-width="1.5"/>
+      <text x="60" y="32" text-anchor="middle" font-size="20">⚙️</text>
+      <text x="60" y="50" text-anchor="middle" class="node-title">Jenkins</text>
+      <text x="60" y="62" text-anchor="middle" class="node-sub">CI/CD Engine</text>
+    </g>
+
+    <!-- Arrow Jenkins -> Docker -->
+    <path d="M 480 110 L 515 110" class="connection-line-solid" marker-end="url(#arrow-blue)"/>
+
+    <!-- 4. Docker -->
+    <g id="docker" class="svg-node" transform="translate(520, 75)">
+      <rect width="120" height="70" rx="8" fill="url(#grad-docker)" stroke="#38bdf8" stroke-width="1.5"/>
+      <text x="60" y="32" text-anchor="middle" font-size="20">🐳</text>
+      <text x="60" y="50" text-anchor="middle" class="node-title">Docker</text>
+      <text x="60" y="62" text-anchor="middle" class="node-sub">Containerize</text>
+    </g>
+
+    <!-- Arrow Docker -> Registry -->
+    <path d="M 640 110 L 675 110" class="connection-line-solid" marker-end="url(#arrow-blue)"/>
+
+    <!-- 5. Container Registry -->
+    <g id="container-registry" class="svg-node" transform="translate(680, 75)">
+      <rect width="130" height="70" rx="8" fill="#0369a1" stroke="#38bdf8" stroke-width="1.5"/>
+      <text x="65" y="32" text-anchor="middle" font-size="20">📦</text>
+      <text x="65" y="50" text-anchor="middle" class="node-title">Registry</text>
+      <text x="65" y="62" text-anchor="middle" class="node-sub">ECR / DockerHub</text>
+    </g>
+
+    <!-- Pipeline lower branch: Terraform & Ansible Provisioning -->
+    <!-- Arrow Registry -> Terraform -->
+    <path d="M 745 145 L 745 180 L 845 180 L 845 145" class="connection-line-solid" marker-end="url(#arrow-purple)"/>
+
+    <!-- 6. Terraform -->
+    <g id="terraform" class="svg-node" transform="translate(840, 75)">
+      <rect width="120" height="70" rx="8" fill="url(#grad-iac)" stroke="#c084fc" stroke-width="1.5"/>
+      <text x="60" y="32" text-anchor="middle" font-size="20">🏗️</text>
+      <text x="60" y="50" text-anchor="middle" class="node-title">Terraform</text>
+      <text x="60" y="62" text-anchor="middle" class="node-sub">IaC Provision</text>
+    </g>
+
+    <!-- Arrow Terraform -> Ansible -->
+    <path d="M 960 110 L 995 110" class="connection-line-solid" marker-end="url(#arrow-purple)"/>
+
+    <!-- 7. Ansible -->
+    <g id="ansible" class="svg-node" transform="translate(1000, 75)">
+      <rect width="120" height="70" rx="8" fill="#581c87" stroke="#d8b4fe" stroke-width="1.5"/>
+      <text x="60" y="32" text-anchor="middle" font-size="20">📜</text>
+      <text x="60" y="50" text-anchor="middle" class="node-title">Ansible</text>
+      <text x="60" y="62" text-anchor="middle" class="node-sub">Config Mgmt</text>
+    </g>
+
+    <!-- Arrow Pipeline to EKS Cluster -->
+    <path d="M 1060 145 L 1060 270" class="connection-line-solid" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrow-green)"/>
+  </g>
+
+  <!-- ================= SECTION B: KUBERNETES RUNTIME CLUSTER (BOTTOM REGION) ================= -->
+  <g id="k8s-runtime-group">
+    <!-- AWS EKS Outer Boundary -->
+    <g id="eks" class="svg-node">
+      <rect x="20" y="250" width="1160" height="530" class="cluster-box" stroke="#059669" stroke-width="2"/>
+    </g>
+    <text x="40" y="278" class="group-label" fill="#4ade80">☁️ AWS EKS Cluster (Managed Production Kubernetes Environment)</text>
+
+    <!-- User Box (Left Side Input) -->
+    <g id="user-actor" transform="translate(50, 340)">
+      <circle cx="35" cy="35" r="30" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+      <text x="35" y="40" text-anchor="middle" font-size="24">👤</text>
+      <text x="35" y="85" text-anchor="middle" class="node-title">Client User</text>
+      <text x="35" y="98" text-anchor="middle" class="node-sub">Web Browser</text>
+    </g>
+
+    <!-- Arrow User -> Load Balancer -->
+    <path d="M 115 375 L 165 375" class="connection-line-solid" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+    <!-- 8. Load Balancer -->
+    <g id="load-balancer" class="svg-node" transform="translate(170, 335)">
+      <rect width="130" height="80" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+      <text x="65" y="35" text-anchor="middle" font-size="22">⚖️</text>
+      <text x="65" y="57" text-anchor="middle" class="node-title">Load Balancer</text>
+      <text x="65" y="70" text-anchor="middle" class="node-sub">AWS ALB / Public Endpoint</text>
+    </g>
+
+    <!-- Arrow Load Balancer -> Ingress -->
+    <path d="M 300 375 L 345 375" class="connection-line-solid" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+    <!-- 9. Ingress -->
+    <g id="ingress" class="svg-node" transform="translate(350, 335)">
+      <rect width="130" height="80" rx="10" fill="#1e293b" stroke="#818cf8" stroke-width="1.5"/>
+      <text x="65" y="35" text-anchor="middle" font-size="22">🚪</text>
+      <text x="65" y="57" text-anchor="middle" class="node-title">Ingress</text>
+      <text x="65" y="70" text-anchor="middle" class="node-sub">Routing Rules</text>
+    </g>
+
+    <!-- Arrow Ingress -> Kubernetes Service -->
+    <path d="M 480 375 L 525 375" class="connection-line-solid" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+    <!-- 10. Kubernetes Service -->
+    <g id="service" class="svg-node" transform="translate(530, 335)">
+      <rect width="140" height="80" rx="10" fill="#312e81" stroke="#a78bfa" stroke-width="1.5"/>
+      <text x="70" y="35" text-anchor="middle" font-size="22">🔌</text>
+      <text x="70" y="57" text-anchor="middle" class="node-title">K8s Service</text>
+      <text x="70" y="70" text-anchor="middle" class="node-sub">ClusterIP (Stable IP)</text>
+    </g>
+
+    <!-- Arrow Service -> Kubernetes Deployment -->
+    <path d="M 670 375 L 715 375" class="connection-line-solid" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+    <!-- 11. Kubernetes Deployment Container Box -->
+    <g id="deployment-container">
+      <rect x="720" y="300" width="430" height="450" rx="12" fill="#022c22" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 2"/>
+      <text x="740" y="325" class="group-label" fill="#34d399">📦 Kubernetes Deployment (Replicas: 3)</text>
+    </g>
+
+    <!-- Deployment Controller Node -->
+    <g id="deployment" class="svg-node" transform="translate(740, 340)">
+      <rect width="390" height="60" rx="8" fill="url(#grad-k8s)" stroke="#34d399" stroke-width="1.5"/>
+      <text x="195" y="28" text-anchor="middle" font-size="18">📄 Kubernetes Deployment Controller</text>
+      <text x="195" y="46" text-anchor="middle" class="node-sub" fill="#a7f3d0">Manages Pod Replicas, Rolling Updates &amp; Self-Healing</text>
+    </g>
+
+    <!-- Split Lines from Deployment to Pods -->
+    <path d="M 935 400 L 935 435" class="connection-line-solid" stroke="#34d399" stroke-width="2"/>
+    <path d="M 795 435 L 1075 435" class="connection-line-solid" stroke="#34d399" stroke-width="2"/>
+    <path d="M 795 435 L 795 460" class="connection-line-solid" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+    <path d="M 935 435 L 935 460" class="connection-line-solid" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+    <path d="M 1075 435 L 1075 460" class="connection-line-solid" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+
+    <!-- 12. App Pod 1 -->
+    <g id="app-pod-1" class="svg-node" transform="translate(745, 465)">
+      <rect width="100" height="90" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1.5" id="pod-rect-1"/>
+      <text x="50" y="32" text-anchor="middle" font-size="20">🧊</text>
+      <text x="50" y="52" text-anchor="middle" class="node-title">App Pod 1</text>
+      <text x="50" y="68" text-anchor="middle" class="node-sub" id="pod-status-1" fill="#6ee7b7">Healthy</text>
+      <text x="50" y="80" text-anchor="middle" class="node-sub" id="pod-ver-1">v1.0.0</text>
+    </g>
+
+    <!-- 13. App Pod 2 -->
+    <g id="app-pod-2" class="svg-node" transform="translate(885, 465)">
+      <rect width="100" height="90" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1.5" id="pod-rect-2"/>
+      <text x="50" y="32" text-anchor="middle" font-size="20">🧊</text>
+      <text x="50" y="52" text-anchor="middle" class="node-title">App Pod 2</text>
+      <text x="50" y="68" text-anchor="middle" class="node-sub" id="pod-status-2" fill="#6ee7b7">Healthy</text>
+      <text x="50" y="80" text-anchor="middle" class="node-sub" id="pod-ver-2">v1.0.0</text>
+    </g>
+
+    <!-- 14. App Pod 3 -->
+    <g id="app-pod-3" class="svg-node" transform="translate(1025, 465)">
+      <rect width="100" height="90" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1.5" id="pod-rect-3"/>
+      <text x="50" y="32" text-anchor="middle" font-size="20">🧊</text>
+      <text x="50" y="52" text-anchor="middle" class="node-title">App Pod 3</text>
+      <text x="50" y="68" text-anchor="middle" class="node-sub" id="pod-status-3" fill="#6ee7b7">Healthy</text>
+      <text x="50" y="80" text-anchor="middle" class="node-sub" id="pod-ver-3">v1.0.0</text>
+    </g>
+
+    <!-- Arrow Pods -> Main Application Core -->
+    <path d="M 795 555 L 795 590 L 935 590 L 935 605" class="connection-line-solid" stroke="#ec4899" stroke-width="2"/>
+    <path d="M 935 555 L 935 605" class="connection-line-solid" stroke="#ec4899" stroke-width="2"/>
+    <path d="M 1075 555 L 1075 590 L 935 590 L 935 605" class="connection-line-solid" stroke="#ec4899" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- 15. System Architecture Diagram Viewer Core Application -->
+    <g id="app-viewer" class="svg-node" transform="translate(740, 615)">
+      <rect width="390" height="110" rx="12" fill="url(#grad-app)" stroke="#f472b6" stroke-width="2"/>
+      <text x="195" y="38" text-anchor="middle" font-size="24">🖥️</text>
+      <text x="195" y="65" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">SYSTEM ARCHITECTURE DIAGRAM VIEWER</text>
+      <text x="195" y="85" text-anchor="middle" class="node-sub" fill="#fbcfe8">Production Web Application Container Layer (Nginx Alpine)</text>
+    </g>
+  </g>
+</svg>

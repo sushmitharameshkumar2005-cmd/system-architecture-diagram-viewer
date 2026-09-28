@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Architecture Diagram Viewer - Cloud Native DevOps</title>
+    <meta name="description" content="Interactive SVG visualization of modern cloud-native system architecture and DevOps deployment pipeline.">
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+    <link rel="shortcut icon" href="assets/favicon.svg">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Master Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ==========================================================================
+         HEADER / NAVIGATION BAR
+         ========================================================================== -->
+    <header class="header">
+        <div class="container header-container">
+            <a href="#" class="logo" aria-label="System Architecture Diagram Viewer Home">
+                <span class="logo-icon">☸️</span>
+                <span>System Architecture Diagram Viewer</span>
+            </a>
+
+            <nav>
+                <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle Navigation Menu">☰</button>
+                <ul class="nav-links" id="nav-links">
+                    <li><a href="#architecture" class="nav-link">Architecture</a></li>
+                    <li><a href="#simulations" class="nav-link">K8s Features</a></li>
+                    <li><a href="#pipeline" class="nav-link">DevOps Pipeline</a></li>
+                    <li><a href="#documentation" class="nav-link">Documentation</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-right">
+                <div class="badge-status">
+                    <span class="status-dot"></span>
+                    <span>Production Ready</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==========================================================================
+         HERO SECTION
+         ========================================================================== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">System Architecture Diagram Viewer</h1>
+                <p class="hero-subtitle">Interactive visualization of a complete, cloud-native DevOps architecture and Kubernetes deployment pipeline.</p>
+                <div class="hero-buttons">
+                    <a href="#architecture" class="btn btn-primary">
+                        <span>🔍</span> Explore Architecture
+                    </a>
+                    <a href="#pipeline" class="btn btn-secondary">
+                        <span>🚀</span> View Pipeline
+                    </a>
+                </div>
+
+                <!-- System Metadata Summary Cards -->
+                <div class="hero-metrics">
+                    <div class="metric-card">
+                        <div class="metric-label">Application</div>
+                        <div class="metric-value">Diagram Viewer</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Architecture</div>
+                        <div class="metric-value">Cloud Native</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Orchestration</div>
+                        <div class="metric-value">Kubernetes EKS</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">CI/CD Engine</div>
+                        <div class="metric-value">Jenkins & Docker</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         MAIN ARCHITECTURE VIEWER SECTION
+         ========================================================================== -->
+    <section id="architecture" class="section">
+        <div class="container">
+            <div class="section-title-group">
+                <h2 class="section-title">System & DevOps Architecture Diagram</h2>
+                <p class="section-subtitle">Click any component to inspect technical responsibilities, input/output schemas, and purpose.</p>
+            </div>
+
+            <div class="architecture-layout">
+                <!-- SVG Canvas Container Card -->
+                <div class="viewer-card" id="svg-viewport-card">
+                    <!-- Toolbar Controls -->
+                    <div class="viewer-toolbar">
+                        <div class="toolbar-controls">
+                            <button id="btn-zoom-in" class="tool-btn" title="Zoom In">➕ Zoom In</button>
+                            <button id="btn-zoom-out" class="tool-btn" title="Zoom Out">➖ Zoom Out</button>
+                            <button id="btn-reset" class="tool-btn" title="Reset View">🔄 Reset</button>
+                            <button id="btn-fullscreen" class="tool-btn" title="Toggle Fullscreen">⛶ Fullscreen</button>
+                        </div>
+
+                        <div class="search-box">
+                            <span class="search-icon">🔍</span>
+                            <input type="text" id="component-search-input" class="search-input" placeholder="Search architecture component..." aria-label="Search component">
+                        </div>
+                    </div>
+
+                    <!-- Search Status Feedback Line -->
+                    <div id="search-status-text" style="padding: 0.25rem 1.25rem; font-size: 0.8rem; background: #0b0f19;"></div>
+
+                    <!-- SVG Viewport -->
+                    <div class="svg-viewport" id="svg-viewport">
+                        <!-- Inline SVG loaded cleanly for zero CORS latency -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="100%" height="100%" id="main-architecture-svg">
+                          <defs>
+                            <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                              <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b"/>
+                            </marker>
+                            <marker id="arrow-blue" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                              <path d="M 0 0 L 10 5 L 0 10 z" fill="#38bdf8"/>
+                            </marker>
+                            <marker id="arrow-purple" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                              <path d="M 0 0 L 10 5 L 0 10 z" fill="#c084fc"/>
+                            </marker>
+                            <marker id="arrow-green" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                              <path d="M 0 0 L 10 5 L 0 10 z" fill="#4ade80"/>
+                            </marker>
+
+                            <linearGradient id="grad-vcs" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#1e293b"/>
+                              <stop offset="100%" stop-color="#0f172a"/>
+                            </linearGradient>
+                            <linearGradient id="grad-cicd" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#1e1b4b"/>
+                              <stop offset="100%" stop-color="#312e81"/>
+                            </linearGradient>
+                            <linearGradient id="grad-docker" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#0c4a6e"/>
+                              <stop offset="100%" stop-color="#0369a1"/>
+                            </linearGradient>
+                            <linearGradient id="grad-iac" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#4c1d95"/>
+                              <stop offset="100%" stop-color="#6b21a8"/>
+                            </linearGradient>
+                            <linearGradient id="grad-k8s" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#065f46"/>
+                              <stop offset="100%" stop-color="#047857"/>
+                            </linearGradient>
+                            <linearGradient id="grad-app" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stop-color="#831843"/>
+                              <stop offset="100%" stop-color="#be185d"/>
+                            </linearGradient>
+                          </defs>
+
+                          <!-- SECTION A: DEVOPS PIPELINE LAYER (TOP REGION) -->
+                          <g id="pipeline-group">
+                            <rect x="20" y="20" width="1160" height="210" class="cluster-box" />
+                            <text x="40" y="45" class="group-label">🚀 DevOps Automation Delivery Pipeline (Source to Cloud)</text>
+
+                            <!-- Developer -->
+                            <g id="developer" class="svg-node" transform="translate(50, 75)">
+                              <rect width="110" height="70" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+                              <text x="55" y="32" text-anchor="middle" font-size="20">👨‍💻</text>
+                              <text x="55" y="52" text-anchor="middle" class="node-title">Developer</text>
+                            </g>
+
+                            <path d="M 160 110 L 195 110" class="connection-line-solid" marker-end="url(#arrow-blue)"/>
+
+                            <!-- GitHub -->
+                            <g id="github" class="svg-node" transform="translate(200, 75)">
+                              <rect width="120" height="70" rx="8" fill="url(#grad-vcs)" stroke="#6366f1" stroke-width="1.5"/>
+                              <text x="60" y="32" text-anchor="middle" font-size="20">🐙</text>
+                              <text x="60" y="50" text-anchor="middle" class="node-title">GitHub</text>
+                              <text x="60" y="62" text-anchor="middle" class="node-sub">Source Control</text>
+                            </g>
+
+                            <path d="M 320 110 L 355 110" class="connection-line-solid" marker-end="url(#arrow-blue)"/>
+
+                            <!-- Jenkins -->
+                            <g id="jenkins" class="svg-node" transform="translate(360, 75)">
+                              <rect width="120" height="70" rx="8" fill="url(#grad-cicd)" stroke="#818cf8" stroke-width="1.5"/>
+                              <text x="60" y="32" text-anchor="middle" font-size="20">⚙️</text>
+                              <text x="60" y="50" text-anchor="middle" class="node-title">Jenkins</text>
+                              <text x="60" y="62" text-anchor="middle" class="node-sub">CI/CD Engine</text>
+                            </g>
+
+                            <path d="M 480 110 L 515 110" class="connection-line-solid" marker-end="url(#arrow-blue)"/>
+
+                            <!-- Docker -->
+                            <g id="docker" class="svg-node" transform="translate(520, 75)">
+                              <rect width="120" height="70" rx="8" fill="url(#grad-docker)" stroke="#38bdf8" stroke-width="1.5"/>
+                              <text x="60" y="32" text-anchor="middle" font-size="20">🐳</text>
+                              <text x="60" y="50" text-anchor="middle" class="node-title">Docker</text>
+                              <text x="60" y="62" text-anchor="middle" class="node-sub">Containerize</text>
+                            </g>
+
+                            <path d="M 640 110 L 675 110" class="connection-line-solid" marker-end="url(#arrow-blue)"/>
+
+                            <!-- Container Registry -->
+                            <g id="container-registry" class="svg-node" transform="translate(680, 75)">
+                              <rect width="130" height="70" rx="8" fill="#0369a1" stroke="#38bdf8" stroke-width="1.5"/>
+                              <text x="65" y="32" text-anchor="middle" font-size="20">📦</text>
+                              <text x="65" y="50" text-anchor="middle" class="node-title">Registry</text>
+                              <text x="65" y="62" text-anchor="middle" class="node-sub">ECR / DockerHub</text>
+                            </g>
+
+                            <path d="M 745 145 L 745 180 L 845 180 L 845 145" class="connection-line-solid" marker-end="url(#arrow-purple)"/>
+
+                            <!-- Terraform -->
+                            <g id="terraform" class="svg-node" transform="translate(840, 75)">
+                              <rect width="120" height="70" rx="8" fill="url(#grad-iac)" stroke="#c084fc" stroke-width="1.5"/>
+                              <text x="60" y="32" text-anchor="middle" font-size="20">🏗️</text>
+                              <text x="60" y="50" text-anchor="middle" class="node-title">Terraform</text>
+                              <text x="60" y="62" text-anchor="middle" class="node-sub">IaC Provision</text>
+                            </g>
+
+                            <path d="M 960 110 L 995 110" class="connection-line-solid" marker-end="url(#arrow-purple)"/>
+
+                            <!-- Ansible -->
+                            <g id="ansible" class="svg-node" transform="translate(1000, 75)">
+                              <rect width="120" height="70" rx="8" fill="#581c87" stroke="#d8b4fe" stroke-width="1.5"/>
+                              <text x="60" y="32" text-anchor="middle" font-size="20">📜</text>
+                              <text x="60" y="50" text-anchor="middle" class="node-title">Ansible</text>
+                              <text x="60" y="62" text-anchor="middle" class="node-sub">Config Mgmt</text>
+                            </g>
+
+                            <path d="M 1060 145 L 1060 270" class="connection-line-solid" stroke="#4ade80" stroke-width="2.5" marker-end="url(#arrow-green)"/>
+                          </g>
+
+                          <!-- SECTION B: KUBERNETES RUNTIME CLUSTER -->
+                          <g id="k8s-runtime-group">
+                            <g id="eks" class="svg-node">
+                              <rect x="20" y="250" width="1160" height="530" class="cluster-box" stroke="#059669" stroke-width="2"/>
+                            </g>
+                            <text x="40" y="278" class="group-label" fill="#4ade80">☁️ AWS EKS Cluster (Managed Production Kubernetes Environment)</text>
+
+                            <!-- User Actor -->
+                            <g id="user-actor" transform="translate(50, 340)">
+                              <circle cx="35" cy="35" r="30" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+                              <text x="35" y="40" text-anchor="middle" font-size="24">👤</text>
+                              <text x="35" y="85" text-anchor="middle" class="node-title">Client User</text>
+                              <text x="35" y="98" text-anchor="middle" class="node-sub">Web Browser</text>
+                            </g>
+
+                            <path d="M 115 375 L 165 375" class="connection-line-solid" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+                            <!-- Load Balancer -->
+                            <g id="load-balancer" class="svg-node" transform="translate(170, 335)">
+                              <rect width="130" height="80" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+                              <text x="65" y="35" text-anchor="middle" font-size="22">⚖️</text>
+                              <text x="65" y="57" text-anchor="middle" class="node-title">Load Balancer</text>
+                              <text x="65" y="70" text-anchor="middle" class="node-sub">AWS ALB Endpoint</text>
+                            </g>
+
+                            <path d="M 300 375 L 345 375" class="connection-line-solid" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+                            <!-- Ingress -->
+                            <g id="ingress" class="svg-node" transform="translate(350, 335)">
+                              <rect width="130" height="80" rx="10" fill="#1e293b" stroke="#818cf8" stroke-width="1.5"/>
+                              <text x="65" y="35" text-anchor="middle" font-size="22">🚪</text>
+                              <text x="65" y="57" text-anchor="middle" class="node-title">Ingress</text>
+                              <text x="65" y="70" text-anchor="middle" class="node-sub">Routing Rules</text>
+                            </g>
+
+                            <path d="M 480 375 L 525 375" class="connection-line-solid" stroke="#818cf8" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+                            <!-- Service -->
+                            <g id="service" class="svg-node" transform="translate(530, 335)">
+                              <rect width="140" height="80" rx="10" fill="#312e81" stroke="#a78bfa" stroke-width="1.5"/>
+                              <text x="70" y="35" text-anchor="middle" font-size="22">🔌</text>
+                              <text x="70" y="57" text-anchor="middle" class="node-title">K8s Service</text>
+                              <text x="70" y="70" text-anchor="middle" class="node-sub">ClusterIP (Stable IP)</text>
+                            </g>
+
+                            <path d="M 670 375 L 715 375" class="connection-line-solid" stroke="#a78bfa" stroke-width="2" marker-end="url(#arrow-purple)"/>
+
+                            <!-- Deployment -->
+                            <g id="deployment-container">
+                              <rect x="720" y="300" width="430" height="450" rx="12" fill="#022c22" stroke="#10b981" stroke-width="1.5" stroke-dasharray="4 2"/>
+                              <text x="740" y="325" class="group-label" fill="#34d399">📦 Kubernetes Deployment (Replicas: 3)</text>
+                            </g>
+
+                            <g id="deployment" class="svg-node" transform="translate(740, 340)">
+                              <rect width="390" height="60" rx="8" fill="url(#grad-k8s)" stroke="#34d399" stroke-width="1.5"/>
+                              <text x="195" y="28" text-anchor="middle" font-size="18">📄 Kubernetes Deployment Controller</text>
+                              <text x="195" y="46" text-anchor="middle" class="node-sub" fill="#a7f3d0">Manages Pod Replicas, Rolling Updates &amp; Self-Healing</text>
+                            </g>
+
+                            <path d="M 935 400 L 935 435" class="connection-line-solid" stroke="#34d399" stroke-width="2"/>
+                            <path d="M 795 435 L 1075 435" class="connection-line-solid" stroke="#34d399" stroke-width="2"/>
+                            <path d="M 795 435 L 795 460" class="connection-line-solid" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+                            <path d="M 935 435 L 935 460" class="connection-line-solid" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+                            <path d="M 1075 435 L 1075 460" class="connection-line-solid" stroke="#34d399" stroke-width="2" marker-end="url(#arrow-green)"/>
+
+                            <!-- App Pods 1, 2, 3 -->
+                            <g id="app-pod-1" class="svg-node" transform="translate(745, 465)">
+                              <rect width="100" height="90" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1.5" id="pod-rect-1"/>
+                              <text x="50" y="32" text-anchor="middle" font-size="20">🧊</text>
+                              <text x="50" y="52" text-anchor="middle" class="node-title">App Pod 1</text>
+                              <text x="50" y="68" text-anchor="middle" class="node-sub" id="pod-status-1" fill="#6ee7b7">Healthy</text>
+                              <text x="50" y="80" text-anchor="middle" class="node-sub" id="pod-ver-1">v1.0.0</text>
+                            </g>
+
+                            <g id="app-pod-2" class="svg-node" transform="translate(885, 465)">
+                              <rect width="100" height="90" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1.5" id="pod-rect-2"/>
+                              <text x="50" y="32" text-anchor="middle" font-size="20">🧊</text>
+                              <text x="50" y="52" text-anchor="middle" class="node-title">App Pod 2</text>
+                              <text x="50" y="68" text-anchor="middle" class="node-sub" id="pod-status-2" fill="#6ee7b7">Healthy</text>
+                              <text x="50" y="80" text-anchor="middle" class="node-sub" id="pod-ver-2">v1.0.0</text>
+                            </g>
+
+                            <g id="app-pod-3" class="svg-node" transform="translate(1025, 465)">
+                              <rect width="100" height="90" rx="8" fill="#064e3b" stroke="#34d399" stroke-width="1.5" id="pod-rect-3"/>
+                              <text x="50" y="32" text-anchor="middle" font-size="20">🧊</text>
+                              <text x="50" y="52" text-anchor="middle" class="node-title">App Pod 3</text>
+                              <text x="50" y="68" text-anchor="middle" class="node-sub" id="pod-status-3" fill="#6ee7b7">Healthy</text>
+                              <text x="50" y="80" text-anchor="middle" class="node-sub" id="pod-ver-3">v1.0.0</text>
+                            </g>
+
+                            <path d="M 795 555 L 795 590 L 935 590 L 935 605" class="connection-line-solid" stroke="#ec4899" stroke-width="2"/>
+                            <path d="M 935 555 L 935 605" class="connection-line-solid" stroke="#ec4899" stroke-width="2"/>
+                            <path d="M 1075 555 L 1075 590 L 935 590 L 935 605" class="connection-line-solid" stroke="#ec4899" stroke-width="2" marker-end="url(#arrow)"/>
+
+                            <!-- App Core -->
+                            <g id="app-viewer" class="svg-node" transform="translate(740, 615)">
+                              <rect width="390" height="110" rx="12" fill="url(#grad-app)" stroke="#f472b6" stroke-width="2"/>
+                              <text x="195" y="38" text-anchor="middle" font-size="24">🖥️</text>
+                              <text x="195" y="65" text-anchor="middle" font-size="16" font-weight="bold" fill="#ffffff">SYSTEM ARCHITECTURE DIAGRAM VIEWER</text>
+                              <text x="195" y="85" text-anchor="middle" class="node-sub" fill="#fbcfe8">Production Web Application Container Layer (Nginx Alpine)</text>
+                            </g>
+                          </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Component Sidebar List Card -->
+                <aside class="sidebar-card">
+                    <h3 class="sidebar-title">
+                        <span>Architecture Index</span>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Categorized</span>
+                    </h3>
+                    <div id="sidebar-categories">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         KUBERNETES INTERACTIVE SIMULATIONS SECTION
+         ========================================================================== -->
+    <section id="simulations" class="section" style="background-color: #0d1322;">
+        <div class="container">
+            <div class="section-title-group">
+                <h2 class="section-title">Interactive Kubernetes Resilience Demonstrations</h2>
+                <p class="section-subtitle">Test cluster self-healing, rolling application updates, and pod scalability in real-time.</p>
+            </div>
+
+            <div class="simulations-grid">
+                <!-- Simulation 1: Self-Healing -->
+                <div class="sim-card">
+                    <div class="sim-header">
+                        <h3 class="sim-title">1. Self-Healing Simulation</h3>
+                        <button id="btn-sim-failure" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">🚨 Fail Pod 2</button>
+                    </div>
+                    <p class="sim-desc">Demonstrates how Kubernetes automatically detects crashed pods and spawns new replacements.</p>
+                    <div class="sim-canvas">
+                        <div class="pod-box" id="sim-pod-1">
+                            <div class="pod-icon">🧊</div>
+                            <div class="pod-name">Pod 1</div>
+                            <div class="pod-ver" id="sim-pod-status-1">Healthy</div>
+                        </div>
+                        <div class="pod-box" id="sim-pod-2">
+                            <div class="pod-icon">🧊</div>
+                            <div class="pod-name">Pod 2</div>
+                            <div class="pod-ver" id="sim-pod-status-2">Healthy</div>
+                        </div>
+                        <div class="pod-box" id="sim-pod-3">
+                            <div class="pod-icon">🧊</div>
+                            <div class="pod-name">Pod 3</div>
+                            <div class="pod-ver" id="sim-pod-status-3">Healthy</div>
+                        </div>
+                    </div>
+                    <div class="sim-log" id="heal-sim-log">Ready: Cluster state monitored by K8s Control Plane.</div>
+                </div>
+
+                <!-- Simulation 2: Rolling Updates -->
+                <div class="sim-card">
+                    <div class="sim-header">
+                        <h3 class="sim-title">2. Zero-Downtime Rolling Update</h3>
+                        <button id="btn-sim-update" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.8rem;">🔄 Deploy v2.0.0</button>
+                    </div>
+                    <p class="sim-desc">Demonstrates progressive pod replacement guaranteeing zero service interruption.</p>
+                    <div class="sim-canvas">
+                        <div class="pod-box">
+                            <div class="pod-icon">🧊</div>
+                            <div class="pod-name">Pod 1</div>
+                            <div class="pod-ver" id="sim-pod-ver-1">v1.0.0</div>
+                        </div>
+                        <div class="pod-box">
+                            <div class="pod-icon">🧊</div>
+                            <div class="pod-name">Pod 2</div>
+                            <div class="pod-ver" id="sim-pod-ver-2">v1.0.0</div>
+                        </div>
+                        <div class="pod-box">
+                            <div class="pod-icon">🧊</div>
+                            <div class="pod-name">Pod 3</div>
+                            <div class="pod-ver" id="sim-pod-ver-3">v1.0.0</div>
+                        </div>
+                    </div>
+                    <div class="sim-log" id="update-sim-log">Ready: Current image version sys-arch-viewer:v1.0.0</div>
+                </div>
+
+                <!-- Simulation 3: Pod Scalability -->
+                <div class="sim-card">
+                    <div class="sim-header">
+                        <h3 class="sim-title">3. Application Scalability</h3>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button id="btn-scale-up" class="btn btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.8rem;">➕ Scale Up</button>
+                            <button id="btn-scale-down" class="btn btn-secondary" style="padding: 0.35rem 0.65rem; font-size: 0.8rem;">➖ Scale Down</button>
+                        </div>
+                    </div>
+                    <p class="sim-desc">Replicas: <strong id="replica-count" style="color: var(--accent-blue);">3</strong> (Dynamic range: 1 to 6 pods)</p>
+                    <div class="sim-canvas" id="scale-pods-canvas">
+                        <!-- Rendered dynamically -->
+                    </div>
+                    <div class="sim-log" id="scale-sim-log">Ready: Replicas set to desired target state.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         DEVOPS PIPELINE SECTION
+         ========================================================================== -->
+    <section id="pipeline" class="section">
+        <div class="container">
+            <div class="section-title-group">
+                <h2 class="section-title">Complete End-to-End DevOps Pipeline</h2>
+                <p class="section-subtitle">Automated workflow from developer commit to live production on AWS Kubernetes.</p>
+            </div>
+
+            <div class="pipeline-flow">
+                <div class="pipeline-card">
+                    <span class="step-num">Step 01</span>
+                    <div class="pipeline-tool">GitHub</div>
+                    <div class="pipeline-purpose">Source Code Management &amp; Branching Strategy.</div>
+                </div>
+                <div class="pipeline-card">
+                    <span class="step-num">Step 02</span>
+                    <div class="pipeline-tool">Jenkins</div>
+                    <div class="pipeline-purpose">CI/CD Engine triggering automated build jobs on webhooks.</div>
+                </div>
+                <div class="pipeline-card">
+                    <span class="step-num">Step 03</span>
+                    <div class="pipeline-tool">Build &amp; Test</div>
+                    <div class="pipeline-purpose">Executes unit tests &amp; static code quality checks.</div>
+                </div>
+                <div class="pipeline-card">
+                    <span class="step-num">Step 04</span>
+                    <div class="pipeline-tool">Docker</div>
+                    <div class="pipeline-purpose">Containerizes app static files with optimized Nginx base.</div>
+                </div>
+                <div class="pipeline-card">
+                    <span class="step-num">Step 05</span>
+                    <div class="pipeline-tool">Registry</div>
+                    <div class="pipeline-purpose">Pushes versioned container image to AWS ECR / DockerHub.</div>
+                </div>
+                <div class="pipeline-card">
+                    <span class="step-num">Step 06</span>
+                    <div class="pipeline-tool">Terraform</div>
+                    <div class="pipeline-purpose">Provisions VPC, Subnets, and EKS Cluster using IaC.</div>
+                </div>
+                <div class="pipeline-card">
+                    <span class="step-num">Step 07</span>
+                    <div class="pipeline-tool">Ansible</div>
+                    <div class="pipeline-purpose">Configures host server prerequisites and runtime tools.</div>
+                </div>
+                <div class="pipeline-card">
+                    <span class="step-num">Step 08</span>
+                    <div class="pipeline-tool">Kubernetes</div>
+                    <div class="pipeline-purpose">Deploys containerized pods with Ingress &amp; Service load balancing.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         DOCUMENTATION SECTION
+         ========================================================================== -->
+    <section id="documentation" class="section" style="background-color: #0d1322;">
+        <div class="container">
+            <div class="section-title-group">
+                <h2 class="section-title">Architecture Documentation Cards</h2>
+                <p class="section-subtitle">Detailed documentation for every tool and layer in the application stack.</p>
+            </div>
+
+            <div class="doc-grid" id="doc-cards-grid">
+                <!-- Cards populated dynamically via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ==========================================================================
+         REUSABLE COMPONENT DETAIL MODAL
+         ========================================================================== -->
+    <div class="modal-overlay" id="component-modal" aria-hidden="true" role="dialog" aria-labelledby="modal-title">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span id="modal-icon" style="font-size: 1.75rem;">📦</span>
+                    <div>
+                        <h3 class="modal-title" id="modal-title">Component Name</h3>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 0.2rem;">
+                            <span class="modal-category-badge" id="modal-category">Category</span>
+                            <span class="modal-category-badge" id="modal-badge" style="background: rgba(251, 191, 36, 0.15); border-color: var(--accent-amber); color: var(--accent-amber);">Badge</span>
+                        </div>
+                    </div>
+                </div>
+                <button class="modal-close-btn" id="modal-close-btn" aria-label="Close Modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-field">
+                    <div class="field-label">Purpose</div>
+                    <div class="field-value" id="modal-purpose">Detailed description of purpose...</div>
+                </div>
+
+                <div class="modal-field">
+                    <div class="field-label">Why It Is Important</div>
+                    <div class="field-value" id="modal-importance">Significance in the system...</div>
+                </div>
+
+                <div class="modal-field">
+                    <div class="field-label">Responsibilities</div>
+                    <ul class="field-list" id="modal-responsibilities">
+                        <!-- Populated dynamically -->
+                    </ul>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="modal-field">
+                        <div class="field-label">Input</div>
+                        <div class="field-value" id="modal-input">Inputs...</div>
+                    </div>
+                    <div class="modal-field">
+                        <div class="field-label">Output</div>
+                        <div class="field-value" id="modal-output">Outputs...</div>
+                    </div>
+                </div>
+
+                <div class="modal-field">
+                    <div class="field-label">Technologies Used</div>
+                    <div id="modal-technologies">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="modal-field">
+                    <div class="field-label">Example Use Case</div>
+                    <div class="field-value" id="modal-usecase" style="font-family: var(--font-mono); font-size: 0.85rem; background: #070a12; padding: 0.5rem 0.75rem; border-radius: var(--radius-sm);">Use case details...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================================================
+         FOOTER
+         ========================================================================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-brand">System Architecture Diagram Viewer</div>
+                    <p>Interactive cloud-native architecture documentation and DevOps pipeline visualization platform.</p>
+                </div>
+                <div>
+                    <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem;">Navigation</div>
+                    <ul class="footer-links">
+                        <li><a href="#architecture">Architecture Diagram</a></li>
+                        <li><a href="#simulations">K8s Simulations</a></li>
+                        <li><a href="#pipeline">DevOps Pipeline</a></li>
+                        <li><a href="#documentation">Documentation Cards</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div style="font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem;">Stack</div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">HTML5 • CSS3 Dark • Vanilla JS ES6 • Vector SVG • Nginx Ready</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 System Architecture Diagram Viewer. Production-Ready Static Application Layer.
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Modules -->
+    <script src="js/components.js"></script>
+    <script src="js/architecture.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
